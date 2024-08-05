@@ -4,10 +4,10 @@ exports.getPosts = (req, res, next) => {
       {
         _id: "1",
         title: "First Post",
-        content: "This is my first post.",
-        imageUrl: "images/pic.jpg",
+        content: "This is the first post!",
+        imageUrl: "images/duck.jpg",
         creator: {
-          name: "Faiz",
+          name: "Maximilian",
         },
         createdAt: new Date(),
       },
@@ -18,12 +18,15 @@ exports.getPosts = (req, res, next) => {
 exports.createPost = (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
-
+  // Create post in db
   res.status(201).json({
-    message: "Post created succesfully.",
+    message: "Post created successfully!",
     post: {
+      _id: new Date().toISOString(),
       title: title,
       content: content,
+      creator: { name: "Faiz" },
+      createdAt: new Date(),
     },
   });
 };
