@@ -133,6 +133,11 @@ exports.updatePost = (req, res, next) => {
         error.statusCode = 422;
         next(error);
       }
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error("Not authenticated.");
+        error.statusCode = 403;
+        throw error;
+      }
       if (imageUrl !== post.imageUrl) {
         clearImage(post.imageUrl);
       }
@@ -163,6 +168,11 @@ exports.deletePost = (req, res, next) => {
       if (!post) {
         const error = new Error("Post not found for given id.");
         error.statusCode = 422;
+        throw error;
+      }
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error("Not authenticated.");
+        error.statusCode = 403;
         throw error;
       }
       clearImage(post.imageUrl);
