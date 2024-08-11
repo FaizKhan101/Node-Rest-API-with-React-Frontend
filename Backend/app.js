@@ -64,14 +64,9 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect("mongodb://localhost:27017/messages")
-  .then((result) => {
+  .then( async (result) => {
     const server = app.listen(8080);
-    const io = require("socket.io")(server, {
-      cors: {
-        origin: "*",
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTION']
-      }
-    });
+    const io = await require("./socket").init(server);
     io.on("connection", (socket) => {
       console.log("Client Connected!");
     });
