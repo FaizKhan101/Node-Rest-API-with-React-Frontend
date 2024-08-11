@@ -55,17 +55,26 @@ app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
   const message = error.message;
-  const data = error.data
+  const data = error.data;
   res.status(status).json({
     message: message,
-    data: data
+    data: data,
   });
 });
 
 mongoose
   .connect("mongodb://localhost:27017/messages")
   .then((result) => {
-    app.listen(8080, () => console.log("Server start at port:8080"));
+    const server = app.listen(8080);
+    const io = require("socket.io")(server, {
+      cors: {
+        origin: "*",
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTION']
+      }
+    });
+    io.on("connection", (socket) => {
+      console.log("Client Connected!");
+    });
   })
   .catch((err) => {
     console.log(err);
